@@ -19,14 +19,45 @@
 # DEALINGS IN THE SOFTWARE.
 
 from flask import Flask, render_template
+from pymongo import Connection
+import json
+import time
 
 app = Flask(__name__)
+
+connection = Connection('localhost', 27017)
+db = connection.firehose
 
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
+@app.route("/overview/<package>")
+def overview(package):
+    inf = {
+        "package": package
+    }
+    return render_template("overview.html", **inf)
+
+
+@app.route("/api/times/<package>")
+def api_times(package):
+    reports = db.reports.find({"package": package})
+    ret = []
+    for report in reports:
+        when = report['when']
+        report = report['report']
+        sut = report['metadata']['sut']
+
+        ret.append({
+            "sut": sut,
+            "when": time.mktime(when.timetuple()),
+            "time": report['metadata']['stats']['wallclocktime']
+        })
+
+    return json.dumps(ret)
 
 if __name__ == '__main__':
     app.run(debug=True)
