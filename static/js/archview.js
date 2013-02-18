@@ -40,8 +40,8 @@ $(document).ready(function() {
 
   var line = d3.svg.line()
       .interpolate("basis")
-      .x(function(d) { return x(d.time); })
-      .y(function(d) { return y(d.when); });
+      .x(function(d) { return x(d.when); })
+      .y(function(d) { return y(d.time); });
 
   var svg = d3.select("body").append("svg")
       .attr("width", width + margin.left + margin.right)
@@ -100,7 +100,7 @@ $(document).ready(function() {
 
     arch.append("text")
         .datum(function(d) { return {name: d.name, value: d.values}; })
-        .attr("transform", function(d) { return "translate(" + x(d.value.when) + "," + y(d.value.time) + ")"; })
+        .attr("transform", function(d) { return "translate(" + x(d.value[0].when) + "," + y(d.value[0].time) + ")"; })
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function(d) { return d.name; });
