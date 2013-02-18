@@ -99,8 +99,7 @@ $(document).ready(function() {
         .style("stroke", function(d) { return color(d.name); });
 
     arch.append("text")
-        .datum(function(d) { return {name: d.name, value: d.values}; })
-        .attr("transform", function(d) { return "translate(" + x(d.value[0].when) + "," + y(d.value[0].time) + ")"; })
+        .attr("transform", function(d) { return "translate(" + x(d.values[0].when) + "," + y(d.values[0].time) + ")"; })
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function(d) { return d.name; });
