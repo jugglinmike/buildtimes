@@ -20,6 +20,7 @@
 
 from flask import Flask, render_template
 from pymongo import Connection
+from monomoy.utils import JSONEncoder
 import json
 import time
 
@@ -36,28 +37,29 @@ def index():
 
 @app.route("/overview/<package>")
 def overview(package):
+
     inf = {
-        "package": package
+        "package": package,
     }
     return render_template("overview.html", **inf)
 
-
-@app.route("/api/times/<package>")
-def api_times(package):
+@app.route("/times/<package>")
+def times(package):
     reports = db.reports.find({"package": package})
-    ret = []
+    tdata = []
     for report in reports:
         when = report['when']
         report = report['report']
-        sut = report['metadata']['sut']
+        meta = report['metadata']
+        sut = meta['sut']
 
-        ret.append({
+        tdata.append({
+            "time": meta['stats']['wallclocktime'],
             "sut": sut,
-            "when": time.mktime(when.timetuple()),
-            "time": report['metadata']['stats']['wallclocktime']
+            "arch": sut['buildarch'] if 'buildarch' in sut else "source",
+            "when": when
         })
-
-    return json.dumps(ret)
+    return json.dumps(tdata, cls=JSONEncoder)
 
 if __name__ == '__main__':
     app.run(debug=True)

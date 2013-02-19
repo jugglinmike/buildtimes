@@ -3,6 +3,8 @@
     <head>
         <title>{% block title %}{% endblock %} | buildtimes</title>
         <link rel="stylesheet" href = "{{ url_for('static', filename='css/buildtimes.css') }}" ></link>
+{% block head %}
+{% endblock %}
     </head>
     <body>
         <main>

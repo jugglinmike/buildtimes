@@ -2,8 +2,22 @@
 
 {% block title %}{{package}}{% endblock %}
 
+{% block head %}
+    <script type = 'text/javascript' >var pkg = '{{package}}';</script>
+    <script
+        type = 'text/javascript'
+        src = '{{ url_for('static', filename='js/jquery.min.js') }}' ></script>
+    <script
+        type = 'text/javascript'
+        src = '{{ url_for('static', filename='js/d3.v3.js') }}' ></script>
+    <script
+        type = 'text/javascript'
+        src = '{{ url_for('static', filename='js/archview.js') }}' ></script>
+<style>
+</style>
+{% endblock %}
+
 {% block content %}
 <h1>{{package}}</h1>
-
 
 {% endblock %}
